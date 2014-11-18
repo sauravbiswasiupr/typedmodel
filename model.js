@@ -39,7 +39,7 @@ function Model(props, converters, diffFn)
 
   _.forEach(converters, function(value, key) {
     var fName = camelCase(key);
-    self["set" + fName] = function(data) {
+    self["from" + fName] = function(data) {
       self.set(data, key);
     };
 
@@ -369,6 +369,19 @@ function ArrayModel(Type, converters, diffFn)
 
   var _vector = [];
   var _isImmutable = false;
+
+  var self = this;
+
+  _.forEach(converters, function(value, key) {
+    var fName = camelCase(key);
+    self["from" + fName] = function(data) {
+      value.fromFn(data, self);
+    };
+
+    self["to" + fName] = function() {
+      value.toFn(self);
+    };
+  });
 
   this.insertAt = function(idx, obj)
   {
