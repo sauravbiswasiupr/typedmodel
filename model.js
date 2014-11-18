@@ -44,7 +44,12 @@ function Model(props, converters, diffFn)
     };
 
     self["to" + fName] = function() {
-      self.convertTo(key);
+      if (_.isObject(converters) && converters.hasOwnProperty(type)) {
+        if (_.isFunction(converters[type].toFn))
+          return converters[type].toFn(self);
+      }
+
+      throw new Error("Cannot convert it to ", type);
     };
   });
 
@@ -107,7 +112,7 @@ function Model(props, converters, diffFn)
         value   : defaultValue
       };
     } else
-        throw new Error("Invalid property type");
+        throw new Error("Invalid property type " + key);
 
     if (!_attributes[key].checkFn(defaultValue))
       throw new Error("Invalid $default value for key " + key + ": " + defaultValue);
@@ -123,16 +128,6 @@ function Model(props, converters, diffFn)
     }
 
     throw new Error("Cannot convert it to " + type);
-  };
-
-  var convertTo = function(type)
-  {
-    if (_.isObject(converters) && converters.hasOwnProperty(type)) {
-      if (_.isFunction(converters[type].toFn))
-        return converters[type].toFn(_.cloneDeep(_attributes));
-      }
-
-    throw new Error("Cannot convert it to", type);
   };
 
   this.set = function(data, type)
@@ -340,14 +335,11 @@ function Model(props, converters, diffFn)
 
   this.immutable = function()
   {
-    if (_isImmutable)
-      throw new Error("Object is Immutable");
-
     _isImmutable = true;
 
     for (var key in _attributes) {
       var attribute = _attributes[key];
-      if (_.isEqual(attribute.type, "model") && attribute.value)
+      if (_.isEqual(attribute.type, "model") && attribute.value && !attribute.value.isImmutable())
         attribute.value.immutable();
     }
 
@@ -379,7 +371,7 @@ function ArrayModel(Type, converters, diffFn)
     };
 
     self["to" + fName] = function() {
-      value.toFn(self);
+      return value.toFn(self);
     };
   });
 
