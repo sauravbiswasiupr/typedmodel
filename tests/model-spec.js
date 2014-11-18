@@ -1,7 +1,7 @@
 "use strict";
 
 var _     = require("lodash");
-var model = require("../model");
+var model = require("../typedmodel");
 
 function MySubModel(id, title)
 {

@@ -1,8 +1,8 @@
 {
   "name": "typedmodel",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "typedmodel ==========",
-  "main": "model.js",
+  "main": "typedmodel.js",
   "directories": {
     "test": "tests"
   },
@@ -12,6 +12,9 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/leobispo/typedmodel.git"
+  },
+  "dependencies": {
+    "lodash": "2.4.1"
   },
   "author": "",
   "license": "MIT",
