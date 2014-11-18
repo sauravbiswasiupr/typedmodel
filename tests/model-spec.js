@@ -171,7 +171,7 @@ describe("Test Generic Model", function()
   it("should work with converters", function()
   {
     var mySubModel = new MySubModel();
-    mySubModel.setC1({
+    mySubModel.fromC1({
       myId    : "123",
       myTitle : "Something"
     });
@@ -181,7 +181,7 @@ describe("Test Generic Model", function()
       title : "Something"
     }, mySubModel.toJSON())).toBe(true);
 
-    mySubModel.setC2({
+    mySubModel.fromC2({
       id      : "123",
       name    : "test",
       title   : "abc",
